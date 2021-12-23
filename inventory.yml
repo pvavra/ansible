@@ -1,0 +1,10 @@
+---
+all:
+  vars:
+    # this use must exist on the managed node(s)
+    # ideally, the user is also in the sudoer group
+    ansible_user: pi
+  hosts:
+    node1:
+      # password-less ssh access is necessary with these settings
+      ansible_host: 192.168.178.28
