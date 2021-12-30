@@ -1,0 +1,36 @@
+---
+- name: Provide a "full" R work environment with RStudio
+  hosts: localhost
+
+  tasks:
+    - name: clone spack to /opt
+      ansible.builtin.git:
+        repo: "https://github.com/spack/spack.git"
+        dest: /opt/spack
+
+    - name: set spack git repo to handle many files
+      community.general.git_config:
+        scope: local
+        repo: /opt/spack
+        name: feature.manyFiles
+        value: true
+
+    - name: test `spack info r`
+      ansible.builtin.command: /opt/spack/bin/spack info r
+      register: myvar
+    - debug: var=myvar.stdout_lines
+
+    - name: create spack environment for R
+      ansible.builtin.command: /opt/spack/bin/spack env create r_full spack_r_env.yml
+      args:
+        creates: /opt/spack/var/spack/environments/r_full
+
+    - name: concretize spack env
+      ansible.builtin.command: /opt/spack/bin/spack -e r_full concretize --reuse
+
+    - name: compile r-environmnet
+
+    - name: install official rstudio deb
+      ansible.builtin.apt:
+        deb: https://download1.rstudio.org/desktop/bionic/amd64/rstudio-2021.09.1-372-amd64.deb
+      become: yes

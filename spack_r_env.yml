@@ -1,0 +1,8 @@
+spack:
+  specs:
+    #    - rstudio+notebook  # use deb package to install, instead of using spack to build it.
+    - r-tidyverse
+    - r-afex
+    - r-emmeans
+    - r-rstan
+    - r-brms
